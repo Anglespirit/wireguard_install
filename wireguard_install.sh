@@ -20,11 +20,11 @@ Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
 Separator_1="——————————————————————————————"
 
 #检查root权限
-check_root(){
+Check_root(){
         [[ $EUID!=0 ]] && echo -e "${Error} 当前账号非ROOT(或没有ROOT权限)，无法继续操作，请使用 ${Green_background_prefix} sudo su ${Font_color_suffix} 来获取临时ROOT权限（执行后会提示输入当前账号的密码）。" && exit 1
 }
 #检测系统
-check_sys(){
+Check_sys(){
 	if [[ -e /etc/redhat-release ]]; then
 		if [[ cat /etc/centos-release | grep -q -E -i "release 6" ]]; then
 			release="centos6"
@@ -50,7 +50,7 @@ check_sys(){
 	serverip=$(curl icanhazip.com)
 }
 #更新内核
-update_kernel(){
+Update_kernel(){
 	if [[ ${release} == "centos7" ]]; then
 		yum -y install epel-release   #安装epel
 		sed -i "0,/enabled=0/s//enabled=1/" /etc/yum.repos.d/epel.repo
@@ -80,7 +80,7 @@ fi
 	fi
 }
 #安装wireguard
-install_WG(){
+Install_WG(){
 	if [[ ${release} == "centos" ]]; then
 		yum upgrade
 		echo -e "正在安装额外软件包(Epel)"
@@ -105,16 +105,16 @@ install_WG(){
 	echo -e "安装完成，运行脚本以启动" && exit 1
 }
 #查看配置
-view_conf(){
+View_conf(){
 	cat /etc/wireguard/wg0.conf && exit 1
 }
 #更改配置
-change_wg(){
+Change_wg(){
 	yum install vim
 	vim /etc/wireguard/wg0.conf
 }
 #启动wireguard
-start_wg(){
+Start_wg(){
 	cd /etc/wireguard
 	if [[ !-e ./wg0.conf ]];then
 		Get_key
@@ -150,22 +150,22 @@ start_wg(){
 	fi
 }
 #查看用户
-user_status(){
+User_status(){
 }
 #卸载wireguard
-uninstall_wg(){
+Uninstall_wg(){
 	yum remove wireguard-dkms wireguard-tools
 }
 #查看日志
-view_log(){
+View_log(){
 
 }
 #获取wg的PID
-check_pid(){
+Check_pid(){
 	PID=`ps -ef |grep -v grep | grep wg |awk '{print $2}'`
 }
 #生成双密钥
-get_key(){
+Get_key(){
 	wg genkey | sudo tee -a /etc/wireguard/serviceprivatekey | wg pubkey | sudo tee /etc/wireguard/servicepublickey
 	wg genkey | sudo tee -a /etc/wireguard/clientprivatekey | wg pubkey | sudo tee /etc/wireguard/clientpublickey
 	serviceprivatekey=$(cat serviceprivatekey)
@@ -174,19 +174,19 @@ get_key(){
 	clientpublickey=$(cat clientpublickey)
 }
 # 设置 防火墙规则
-add_iptables(){
+Add_iptables(){
 	iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport ${wg_port} -j ACCEPT
 	iptables -I INPUT -m state --state NEW -m udp -p udp --dport ${wg_port} -j ACCEPT
 	ip6tables -I INPUT -m state --state NEW -m tcp -p tcp --dport ${wg_port} -j ACCEPT
 	ip6tables -I INPUT -m state --state NEW -m udp -p udp --dport ${wg_port} -j ACCEPT
 }
-del_iptables(){
+Del_iptables(){
 	iptables -D INPUT -m state --state NEW -m tcp -p tcp --dport ${wg_port} -j ACCEPT
 	iptables -D INPUT -m state --state NEW -m udp -p udp --dport ${wg_port} -j ACCEPT
 	ip6tables -D INPUT -m state --state NEW -m tcp -p tcp --dport ${wg_port} -j ACCEPT
 	ip6tables -D INPUT -m state --state NEW -m udp -p udp --dport ${wg_port} -j ACCEPT
 }
-save_iptables(){
+Save_iptables(){
 	if [[ ${release} == "centos" ]]; then
 		service iptables save
 		service ip6tables save
@@ -195,7 +195,7 @@ save_iptables(){
 		ip6tables-save > /etc/ip6tables.up.rules
 	fi
 }
-set_iptables(){
+Set_iptables(){
 	if [[ ${release} == "centos" ]]; then
 		service iptables save
 		service ip6tables save
@@ -209,7 +209,7 @@ set_iptables(){
 	fi
 }
 #设置端口
-set_port(){
+Set_port(){
 	while true
 	do
 	echo -e "请输入要监听的服务器端口"
@@ -229,7 +229,7 @@ set_port(){
 	done
 }
 #设置内网地址
-set_address(){
+Set_address(){
 	while true
 	do
 	echo -e "请输入本机的内网地址"
@@ -240,7 +240,7 @@ set_address(){
 #设置DNS
 #设置广告过滤
 #设置自动保存
-set_save(){
+Set_save(){
 	while true
 	do
 	echo -e "是否自动保存配置(本操作保留当前环境配置，覆盖原有的文件)"
@@ -249,7 +249,7 @@ set_save(){
 	done
 }
 #客户端配置
-set_client(){
+Set_client(){
 if [[ !-e ./client.conf ]];then
 	cat > ./client.conf <<-EOF
 	[Interface]
@@ -267,39 +267,39 @@ else
 	rm -f ./client.conf
 }
 #关闭wireguard
-stop(){
+Stop(){
 	systemctl stop wg-quick@wg0
 }
 #Start menu
-start_menu
-check_root
+Start_menu
+Check_root
 echo && stty erase '^H' && read -p "请输入数字 [1-15]：" num
 case "$num" in
 	1)
-	update_kernel
+	Update_kernel
 	2)
-	install_wg
+	Install_wg
 	;;
 	3)
-	start_wg
+	Start_wg
 	;;
 	4)
-	view_conf
+	View_conf
 	;;
 	5)
-	change_wg
+	Change_wg
 	;;
 	6)
-	user_status
+	User_status
 	;;
 	7)
-	uninstall_wg
+	Uninstall_wg
 	;;
 	8)
-	view_log
+	View_log
 	;;
 	9)
-	stop
+	Stop
 	;;
 	*)
 	echo -e "${Error} 请输入正确的数字 [1-8]"
