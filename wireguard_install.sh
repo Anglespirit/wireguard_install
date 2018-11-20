@@ -8,6 +8,7 @@ export PATH=$PATH
 #	Author: AngelRE
 #	Blog: https://liveforlove.club
 #=================================================
+
 sh_ver="1.0.0"
 wg_folder="/etc/wireguard"
 wg_file="${wg_folder}/wg0.conf"
@@ -17,10 +18,11 @@ Info="${Green_font_prefix}[信息]${Font_color_suffix}"
 Error="${Red_font_prefix}[错误]${Font_color_suffix}"
 Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
 Separator_1="——————————————————————————————"
+
 #检查root权限
-#Check_root(){
-#        [[ EUID!=0 ]] && echo -e "${Error} 当前账号非ROOT(或没有ROOT权限)，无法继续操作，请使用 ${Green_background_prefix} sudo su ${Font_color_suffix} 来获取临时ROOT权限（执行后会提示输入当前账号的密码）。" && exit 1
-#}
+Check_root(){
+        [[ $EUID!=0 ]] && echo -e "${Error} 当前账号非ROOT(或没有ROOT权限)，无法继续操作，请使用 ${Green_background_prefix} sudo su ${Font_color_suffix} 来获取临时ROOT权限（执行后会提示输入当前账号的密码）。" && exit 1
+}
 #检测系统
 Check_sys(){
 	if [[ -e /etc/redhat-release ]]; then
@@ -111,7 +113,6 @@ Change_wg(){
 	yum install vim
 	vim /etc/wireguard/wg0.conf
 }
-
 #启动wireguard
 Start_wg(){
 	cd /etc/wireguard
@@ -148,7 +149,6 @@ Start_wg(){
 		cat ./client.conf && exit 1
 	fi
 }
-
 #查看用户
 User_status(){
 
@@ -165,7 +165,6 @@ View_log(){
 check_pid(){
 	PID=`ps -ef |grep -v grep | grep wg |awk '{print $2}'`
 }
-
 #生成双密钥
 Get_key(){
 	wg genkey | sudo tee -a /etc/wireguard/serviceprivatekey | wg pubkey | sudo tee /etc/wireguard/servicepublickey
@@ -175,8 +174,6 @@ Get_key(){
 	clientprivatekey=$(cat clientprivatekey)
 	clientpublickey=$(cat clientpublickey)
 }
-
-
 # 设置 防火墙规则
 Add_iptables(){
 	iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport ${wg_port} -j ACCEPT
@@ -212,7 +209,6 @@ Set_iptables(){
 		chmod +x /etc/network/if-pre-up.d/iptables
 	fi
 }
-
 #设置端口
 Set_port(){
 	while true
@@ -233,7 +229,6 @@ Set_port(){
 	fi
 	done
 }
-
 #设置内网地址
 Set_address(){
 	while true
@@ -244,9 +239,7 @@ Set_address(){
 	done
 }
 #设置DNS
-
 #设置广告过滤
-
 #设置自动保存
 Set_save(){
 	while true
@@ -256,7 +249,6 @@ Set_save(){
 	[[ -z "$wg_save" ]] && wg_save="true"
 	done
 }
-
 #客户端配置
 Set_client(){
 if [[ !-e ./client.conf ]];then
@@ -275,7 +267,6 @@ if [[ !-e ./client.conf ]];then
 else
 	rm -f ./client.conf
 }
-
 #关闭wireguard
 Stop(){
 	systemctl stop wg-quick@wg0
@@ -308,9 +299,9 @@ case "$num" in
 	8)
 	View_log
 	;;
-#	9)
-#	Stop
-#	;;
+	9)
+	Stop
+	;;
 	*)
 	echo -e "${Error} 请输入正确的数字 [1-8]"
 	;;
