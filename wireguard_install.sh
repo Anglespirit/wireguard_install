@@ -25,14 +25,8 @@ check_root(){
 }
 #检测系统
 check_sys(){
-	if [[ -e /etc/redhat-release ]]; then
-		if [[ cat /etc/centos-release | grep -q -E -i "release 6" ]]; then
-			release="centos6"
-		elif [[ cat /etc/centos-release | grep -q -E -i "release 7" ]]; then
-			release="centos7"
-		else 
-			echo -e "暂不支持您的版本，请等待下次更新，万分抱歉！"
-		fi
+	if [[ -f /etc/redhat-release ]]; then
+		release="centos"
 	elif cat /etc/issue | grep -q -E -i "debian"; then
 		release="debian"
 	elif cat /etc/issue | grep -q -E -i "ubuntu"; then
@@ -51,7 +45,7 @@ check_sys(){
 }
 #更新内核
 update_kernel(){
-	if [[ ${release} == "centos7" ]]; then
+	if [[ ${release} == "centos" ]]; then
 		yum -y install epel-release   #安装epel
 		sed -i "0,/enabled=0/s//enabled=1/" /etc/yum.repos.d/epel.repo
 		yum remove -y kernel-devel
