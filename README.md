@@ -4,7 +4,14 @@
 
 WireGuard可以使用的最简单的拓扑之一是点对点连接。在这在两台机器之间建立了安全链接，而没有中央服务器。这种类型的连接也可以在两个以上的成员之间使用，以建立网状VPN拓扑，其中每个单独的服务器可以直接与其对等体通信。由于每个主机都处于平等地位，因此这两种拓扑最适合在服务器之间建立安全消息传递，而不是使用单个服务器作为网关来路由流量
 
+## **一键安装脚本使用**
 
+yum -y install wget
+
+wget -N --no-check-certificate  https://github.com/Anglespirit/wireguard_install/blob/master/wireguard_install.sh&& chmod +x wireguard_install.sh && bash wireguard_install.sh
+
+一键安装之后，可不用继续接下来的步骤
+#脚本属于新手编写，存在部分功能缺失，以及编写错误，请联系我更正，谢谢
 
 ## **安装软件**
 
