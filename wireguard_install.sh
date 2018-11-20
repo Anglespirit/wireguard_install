@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
-
 #=================================================
 #	System Required: CentOS 6+/Debian 6+/Ubuntu 14.04+
 #	Description: Install the WireGuard
@@ -9,7 +8,6 @@ export PATH
 #	Author: AngelRE
 #	Blog: https://liveforlove.club
 #=================================================
-
 sh_ver="1.0.0"
 wg_folder="/etc/wireguard"
 wg_file="${wg_folder}/wg0.conf"
@@ -19,12 +17,10 @@ Info="${Green_font_prefix}[信息]${Font_color_suffix}"
 Error="${Red_font_prefix}[错误]${Font_color_suffix}"
 Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
 Separator_1="——————————————————————————————"
-
 #检查root权限
 Check_root(){
 	[[ $EUID != 0 ]] && echo -e "${Error} 当前账号非ROOT(或没有ROOT权限)，无法继续操作，请使用${Green_background_prefix} sudo su ${Font_color_suffix}来获取临时ROOT权限（执行后会提示输入当前账号的密码）。" && exit 1
 }
-
 #检测系统
 Check_sys(){
 	if [[ -e /etc/redhat-release ]]; then
@@ -284,10 +280,7 @@ else
 Stop(){
 	systemctl stop wg-quick@wg0
 }
-
-
 #Start menu
-
 Start_menu
 echo && stty erase '^H' && read -p "请输入数字 [1-15]：" num
 case "$num" in
@@ -314,7 +307,10 @@ case "$num" in
 	8)
 	View_log
 	;;
+	9)
+	Stop
+	;;
 	*)
-	echo -e "${Error} 请输入正确的数字 [1-8]"
+	echo -e "${Error} 请输入正确的数字 [1-9]"
 	;;
 esac
