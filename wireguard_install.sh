@@ -20,7 +20,7 @@ Separator_1="——————————————————————�
 
 #检查root权限
 Check_root(){
-	[[ $EUID!=0 ]] && echo -e "${Error} 当前账号非ROOT(或没有ROOT权限)，无法继续操作，请使用${Green_background_prefix} sudo su ${Font_color_suffix}来获取临时ROOT权限（执行后会提示输入当前账号的密码）。" && exit 1
+        [[ $EUID!=0 ]] && echo -e "${Error} 当前账号非ROOT(或没有ROOT权限)，无法继续操作，请使用${Green_background_prefix} sudo su ${Font_color_suffix}来获取临时ROOT权限（执行后会提示输入当前账号的密码）。" && exit 1
 }
 
 #检测系统
@@ -284,6 +284,7 @@ Stop(){
 }
 #Start menu
 Start_menu
+Check_root
 echo && stty erase '^H' && read -p "请输入数字 [1-15]：" num
 case "$num" in
 	1)
