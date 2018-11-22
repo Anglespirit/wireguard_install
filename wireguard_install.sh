@@ -111,7 +111,6 @@ change_wg(){
 }
 #启动wireguard
 start_wg(){
-	cd /etc/wireguard
 	if [[ ! -e "/etc/wireguard/wg0.conf" ]]; then
 		get_key
 		umask 077
@@ -134,7 +133,7 @@ start_wg(){
 		set_iptables
 		
 		#开启net转发
-		systemctl -w net.ipv4.ip_forward=1
+		systemctl net.ipv4.ip_forward=1
 		set_client
 		wg-quick up wg0
 		systemctl enable wg-quick@wg0
@@ -249,7 +248,7 @@ set_save(){
 }
 #客户端配置
 set_client(){
-	if [[ ! -e "./client.conf" ]]; then
+	if [[ ! -e "etc/wireguard/client.conf" ]]; then
 		cat > ./client.conf <<-EOF
 		[Interface]
 		PrivateKey = ${clientprivatekey}
