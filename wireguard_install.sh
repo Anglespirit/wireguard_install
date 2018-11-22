@@ -112,12 +112,12 @@ change_wg(){
 #启动wireguard
 start_wg(){
 	cd /etc/wireguard
-	if [[ ! -e "./wg0.conf" ]]; then
-		Get_key
+	if [[ ! -e "/etc/wireguard/wg0.conf" ]]; then
+		get_key
 		umask 077
-		Set_port
-		Set_address
-		cat > ./wg0.conf <<-EOF
+		set_port
+		set_address
+		cat > /etc/wireguard/wg0.conf <<-EOF
 		[Interface]
 		PrivateKey = ${serviceprivatekey}
 		Address = ${wg_address} 
@@ -138,11 +138,12 @@ start_wg(){
 		Set_client
 		wg-quick up wg0
 		systemctl enable wg-quick@wg0
-		cat ./client.conf && exit 1
+		cat /etc/wireguard/client.conf && exit 1
 	else
 		wg-quick up wg0
 		systemctl enable wg-quick@wg0
-		cat ./client.conf && exit 1
+		set_client
+		cat /etc/wireguard/client.conf && exit 1
 	fi
 }
 #查看用户
@@ -150,6 +151,7 @@ start_wg(){
 #卸载wireguard
 uninstall_wg(){
 	yum remove wireguard-dkms wireguard-tools
+	rm -f 
 }
 #查看日志
 
@@ -257,7 +259,7 @@ set_client(){
 		PersistentKeepalive = 25
 		EOF
 	else
-		rm -f ./client.conf
+		rm -f /etc/wireguard/client.conf
 	fi
 }
 #关闭wireguard
