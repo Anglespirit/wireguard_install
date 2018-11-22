@@ -11,6 +11,7 @@ yum -y install wget
 wget -N --no-check-certificate https://raw.githubusercontent.com/Anglespirit/wireguard_install/master/wireguard_install.sh&& chmod +x wireguard_install.sh && bash wireguard_install.sh
 
 一键安装之后，可不用继续接下来的步骤
+
 #脚本属于新手编写，存在部分功能缺失，以及编写错误，请联系我更正，谢谢
 
 ## **安装软件**
