@@ -76,7 +76,7 @@ fi
 	fi
 }
 #安装wireguard
-install_WG(){
+install_wg(){
 	if [[ ${release} == "centos" ]]; then
 		yum upgrade
 		echo -e "正在安装额外软件包(Epel)"
