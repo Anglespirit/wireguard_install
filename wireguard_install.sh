@@ -230,6 +230,8 @@ set_address(){
 	echo -e "请输入本机的内网地址"
 	stty erase '^H' && read -p "(默认: 10.0.0.1/24):" wg_address
 	[[ -z "$wg_address" ]] && wg_address="10.0.0.1/24"
+	expr ${wg_address} + 0 &>/dev/null
+	break
 	done
 }
 #设置DNS
@@ -241,6 +243,8 @@ set_save(){
 	echo -e "是否自动保存配置(本操作保留当前环境配置，覆盖原有的文件)"
 	stty erase '^H' && read -p "(默认: true):" wg_save
 	[[ -z "$wg_save" ]] && wg_save="true"
+	expr ${wg_save} &>/dev/null
+	break
 	done
 }
 #客户端配置
