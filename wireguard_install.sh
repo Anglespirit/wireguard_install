@@ -135,7 +135,7 @@ start_wg(){
 		
 		#开启net转发
 		systemctl -w net.ipv4.ip_forward=1
-		Set_client
+		set_client
 		wg-quick up wg0
 		systemctl enable wg-quick@wg0
 		cat /etc/wireguard/client.conf && exit 1
