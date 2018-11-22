@@ -129,9 +129,9 @@ start_wg(){
 		AllowedIPs = 0.0.0.0/0, ::0/0
 		PersistentKeepalive = 25
 		EOF
-		Add_iptables
-		Save_iptables
-		Set_iptables
+		add_iptables
+		save_iptables
+		set_iptables
 		
 		#开启net转发
 		systemctl -w net.ipv4.ip_forward=1
