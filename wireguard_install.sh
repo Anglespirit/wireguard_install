@@ -15,7 +15,7 @@ filepath=$(cd "$(dirname "$0")"; pwd)
 file=$(echo -e "${filepath}"|awk -F "$0" '{print $1}')
 wg_folder="/etc/wireguard"
 wg_file="${wg_folder}/wg.conf"
-wg_log_file="${wg_file}/wg.log"
+wg_log_file="${wg_folder}/wg.log"
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
 Info="${Green_font_prefix}[信息]${Font_color_suffix}"
 Error="${Red_font_prefix}[错误]${Font_color_suffix}"
@@ -150,7 +150,8 @@ start_wg(){
 #卸载wireguard
 uninstall_wg(){
 	yum remove wireguard-dkms wireguard-tools
-	rm -f 
+	rm -f ${wg_folder}/wg0.conf
+	rm -f ${wg_folder}/client.conf
 }
 #查看日志
 
